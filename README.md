@@ -112,6 +112,6 @@ Todos los errores responden con el mismo formato: `{ "error": { "codigo", "mensa
 
 ## Documentación
 
-- `docs/adr/`: decisiones de arquitectura (ADR-0001 a ADR-0015)
-- `docs/requisitos/`: documento de requisitos (versión vigente: v3)
-- `docs/glosario/`: glosario de lenguaje ubicuo (versión vigente: v3)
+- `docs/adr/`: decisiones de arquitectura (ADR-0001 a ADR-0017)
+- `docs/requisitos/`: documento de requisitos (versión vigente: v4)
+- `docs/glosario/`: glosario de lenguaje ubicuo (versión vigente: v4)
