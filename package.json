@@ -1,0 +1,35 @@
+{
+  "name": "plataforma-farmacologia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "verificar": "tsc --noEmit",
+    "compilar": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amsjcolombiano-webAdrian/Plataforma-Farmacologia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/amsjcolombiano-webAdrian/Plataforma-Farmacologia/issues"
+  },
+  "homepage": "https://github.com/amsjcolombiano-webAdrian/Plataforma-Farmacologia#readme",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^18.0.9"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2"
+  }
+}
