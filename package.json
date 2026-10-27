@@ -14,7 +14,8 @@
     "verificar": "tsc --noEmit",
     "compilar": "tsc",
     "prisma:generar": "prisma generate",
-    "prisma:migrar": "prisma migrate dev"
+    "prisma:migrar": "prisma migrate dev && prisma generate",
+    "asignar-rol": "tsx src/scripts/asignarRol.ts"
   },
   "repository": {
     "type": "git",

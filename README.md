@@ -69,7 +69,18 @@ Requisitos: Node.js y un servidor MySQL.
 | `npm run compilar` | Compila a `dist/` |
 | `npm run iniciar` | Ejecuta la versión compilada |
 | `npm run prisma:generar` | Genera el cliente Prisma |
-| `npm run prisma:migrar` | Crea o actualiza las tablas en MySQL |
+| `npm run prisma:migrar` | Crea o actualiza las tablas en MySQL y regenera el cliente |
+| `npm run asignar-rol -- <correo> <rol>` | Asigna un rol desde la consola (sirve para crear el primer Administrador) |
+
+### Crear el primer Administrador
+
+El registro público siempre crea Estudiantes. Para tener el primer Administrador, regístrate normalmente y luego, en la consola del servidor:
+
+```bash
+npm run asignar-rol -- tu-correo@ejemplo.com administrador
+```
+
+A partir de ahí, ese Administrador asigna los demás roles desde la API. El rol nuevo aplica desde el siguiente inicio de sesión.
 
 ## API disponible
 
@@ -79,6 +90,11 @@ Requisitos: Node.js y un servidor MySQL.
 | `POST /api/autenticacion/registro` | Registra un Estudiante (`{ email, contrasena }`) |
 | `POST /api/autenticacion/inicio-sesion` | Devuelve `{ token, usuario }` |
 | `GET /api/autenticacion/yo` | Usuario actual (cabecera `Authorization: Bearer <token>`) |
+| `POST /api/autenticacion/recuperacion/solicitar` | Envía un enlace para restablecer la contraseña (`{ email }`) |
+| `POST /api/autenticacion/recuperacion/restablecer` | Cambia la contraseña con el token del enlace (`{ token, contrasenaNueva }`) |
+| `PATCH /api/autenticacion/usuarios/:usuarioId/rol` | Asigna un rol (`{ rol }`). Solo Administrador |
+
+En desarrollo, los correos no se envían: se muestran en la consola del servidor. El proveedor de correo real está pendiente de elegir.
 
 Todos los errores responden con el mismo formato: `{ "error": { "codigo", "mensaje", "detalles?" } }`.
 
@@ -86,7 +102,8 @@ Todos los errores responden con el mismo formato: `{ "error": { "codigo", "mensa
 
 - [x] Base compartida (configuración, errores, eventos, validación, middlewares)
 - [x] Autenticación: registro, inicio de sesión, verificación de JWT
-- [ ] Autenticación: recuperación de contraseña y asignación de roles
+- [x] Autenticación: recuperación de contraseña y asignación de roles
+- [ ] Envío real de correos (proveedor pendiente de elegir)
 - [ ] Suscripciones y pagos
 - [ ] Contenido / Pensum
 - [ ] Desafíos

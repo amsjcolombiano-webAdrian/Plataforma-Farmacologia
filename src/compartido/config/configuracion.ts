@@ -19,6 +19,8 @@ export interface ConfiguracionAutenticacion {
 export interface Configuracion {
   entorno: EntornoEjecucion;
   puerto: number;
+  /** Dirección de la aplicación web (frontend); se usa para armar enlaces que van en los correos. */
+  urlAplicacionWeb: string;
   baseDeDatos: ConfiguracionBaseDeDatos;
   autenticacion: ConfiguracionAutenticacion;
 }
@@ -48,6 +50,14 @@ function leerVariableNumerica(nombre: string, valorPorDefecto?: number): number 
   return valorNumerico;
 }
 
+function leerVariableUrl(nombre: string, valorPorDefecto: string): string {
+  const valor = process.env[nombre]?.trim() || valorPorDefecto;
+  if (!URL.canParse(valor)) {
+    throw new Error(`La variable ${nombre} debe ser una URL válida (por ejemplo, http://localhost:5173).`);
+  }
+  return valor.replace(/\/+$/, '');
+}
+
 function determinarEntorno(): EntornoEjecucion {
   const valor = process.env['NODE_ENV'] ?? 'development';
   if (valor === 'production') return 'produccion';
@@ -68,6 +78,7 @@ export function cargarConfiguracion(): Configuracion {
   return {
     entorno,
     puerto: leerVariableNumerica('PUERTO', 3000),
+    urlAplicacionWeb: leerVariableUrl('URL_APLICACION_WEB', 'http://localhost:5173'),
     baseDeDatos: {
       servidor: leerVariableObligatoria('BASE_DATOS_SERVIDOR'),
       puerto: leerVariableNumerica('BASE_DATOS_PUERTO', 3306),

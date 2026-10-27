@@ -1,10 +1,12 @@
 import { ErrorConflicto } from '../../../compartido/errores/erroresAplicacion';
 import { Prisma, type AutenticacionUsuario, type PrismaClient } from '../../../generado/prisma/client';
 import type { RepositorioUsuarios } from '../dominio/puertos';
-import type { DatosNuevoUsuario, Usuario } from '../dominio/usuario';
+import type { DatosNuevoUsuario, Rol, Usuario } from '../dominio/usuario';
 
 /** Código de Prisma para "violación de restricción única". */
 const CODIGO_REGISTRO_DUPLICADO = 'P2002';
+/** Código de Prisma para "el registro a actualizar no existe". */
+const CODIGO_REGISTRO_INEXISTENTE = 'P2025';
 
 function aUsuarioDeDominio(fila: AutenticacionUsuario): Usuario {
   return {
@@ -40,6 +42,18 @@ export class RepositorioUsuariosPrisma implements RepositorioUsuarios {
       // Se confía en el índice único y no en un "buscar antes de crear", que fallaría con dos registros simultáneos.
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === CODIGO_REGISTRO_DUPLICADO) {
         throw new ErrorConflicto('Ya existe una cuenta con ese correo.');
+      }
+      throw error;
+    }
+  }
+
+  async actualizarRol(id: number, rol: Rol): Promise<Usuario | null> {
+    try {
+      const fila = await this.prisma.autenticacionUsuario.update({ where: { id }, data: { rol } });
+      return aUsuarioDeDominio(fila);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === CODIGO_REGISTRO_INEXISTENTE) {
+        return null;
       }
       throw error;
     }

@@ -27,5 +27,23 @@ model AutenticacionUsuario {
   rol           RolUsuario @default(estudiante)
   fechaCreacion DateTime   @default(now()) @map("fecha_creacion")
 
+  tokensRecuperacion AutenticacionTokenRecuperacion[]
+
   @@map("autenticacion_usuarios")
+}
+
+// Tokens de un solo uso para restablecer la contraseña.
+// Solo se guarda el hash SHA-256 del token: quien lea la tabla no puede usarlos.
+// La FK es válida porque ambas tablas pertenecen al mismo módulo.
+model AutenticacionTokenRecuperacion {
+  id              Int                  @id @default(autoincrement())
+  usuarioId       Int                  @map("usuario_id")
+  usuario         AutenticacionUsuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  tokenHash       String               @unique @map("token_hash") @db.Char(64)
+  fechaExpiracion DateTime             @map("fecha_expiracion")
+  fechaUso        DateTime?            @map("fecha_uso")
+  fechaCreacion   DateTime             @default(now()) @map("fecha_creacion")
+
+  @@index([usuarioId])
+  @@map("autenticacion_tokens_recuperacion")
 }

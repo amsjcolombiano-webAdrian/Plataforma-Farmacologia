@@ -9,6 +9,8 @@ import { emisorEventos } from '../../compartido/eventos/emisorEventos';
 import { CasosDeUsoAutenticacion } from './aplicacion/casosDeUso';
 import { CifradorContrasenasBcrypt } from './infraestructura/cifradorContrasenasBcrypt';
 import { EmisorTokensJwt } from './infraestructura/emisorTokensJwt';
+import { EnviadorCorreosConsola } from './infraestructura/enviadorCorreosConsola';
+import { RepositorioTokensRecuperacionPrisma } from './infraestructura/repositorioTokensRecuperacionPrisma';
 import { RepositorioUsuariosPrisma } from './infraestructura/repositorioUsuariosPrisma';
 
 export type { SesionIniciada, UsuarioPublico } from './aplicacion/casosDeUso';
@@ -17,10 +19,14 @@ export { ROLES, type Rol } from './dominio/usuario';
 
 export const fachadaAutenticacion = new CasosDeUsoAutenticacion({
   repositorioUsuarios: new RepositorioUsuariosPrisma(clientePrisma),
+  repositorioTokensRecuperacion: new RepositorioTokensRecuperacionPrisma(clientePrisma),
   cifradorContrasenas: new CifradorContrasenasBcrypt(),
   emisorTokens: new EmisorTokensJwt(
     configuracion.autenticacion.secretoJwt,
     configuracion.autenticacion.expiracionAccesoMinutos,
   ),
   emisorEventos,
+  // Pendiente: reemplazar por el proveedor de correo real cuando se elija (Requisitos v3, sección 8).
+  enviadorCorreos: new EnviadorCorreosConsola(),
+  urlRestablecimientoContrasena: `${configuracion.urlAplicacionWeb}/restablecer-contrasena`,
 });
