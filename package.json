@@ -2,15 +2,19 @@
   "name": "plataforma-farmacologia",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/app.js",
   "directories": {
     "doc": "docs",
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "desarrollo": "tsx watch src/app.ts",
+    "iniciar": "node dist/app.js",
+    "test": "tsx --test \"tests/**/*.test.ts\"",
     "verificar": "tsc --noEmit",
-    "compilar": "tsc"
+    "compilar": "tsc",
+    "prisma:generar": "prisma generate",
+    "prisma:migrar": "prisma migrate dev"
   },
   "repository": {
     "type": "git",
@@ -26,10 +30,21 @@
   "homepage": "https://github.com/amsjcolombiano-webAdrian/Plataforma-Farmacologia#readme",
   "private": true,
   "dependencies": {
-    "dotenv": "^18.0.9"
+    "@prisma/adapter-mariadb": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.6.5",
+    "prisma": "^7.10.1",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }

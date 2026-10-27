@@ -3,3 +3,5 @@ node_modules/
 dist/
 *.log
 .metadata/
+# Cliente generado por Prisma (se regenera con npm run prisma:generar)
+src/generado/

@@ -1,0 +1,31 @@
+// Esquema de base de datos (ADR-0007).
+// Cada tabla lleva el prefijo de su módulo (autenticacion_, suscripciones_, contenido_...),
+// y ningún módulo consulta tablas de otro (ADR-0004): por eso no hay FK entre módulos.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generado/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ─── Módulo: Autenticación ────────────────────────────────────────────────────
+
+enum RolUsuario {
+  estudiante
+  administrador
+  creador_contenido
+}
+
+model AutenticacionUsuario {
+  id            Int        @id @default(autoincrement())
+  email         String     @unique @db.VarChar(255)
+  passwordHash  String     @map("password_hash") @db.VarChar(255)
+  rol           RolUsuario @default(estudiante)
+  fechaCreacion DateTime   @default(now()) @map("fecha_creacion")
+
+  @@map("autenticacion_usuarios")
+}
